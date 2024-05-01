@@ -43,7 +43,7 @@ void DynamicArray::push(int item){
 void DynamicArray::insert(int index,int item){
   // Check index is within bounds
   if(index<0||index>size){
-    throw "Index out of bounds"
+    throw "Index out of bounds";
   }
 
   // Check for space
@@ -59,7 +59,6 @@ void DynamicArray::insert(int index,int item){
   arr[index]=item;
   size++;
 }
-
 
 void DynamicArray::prepend(int item){
   // Ensure space
@@ -86,7 +85,6 @@ int DynamicArray::pop(){
 }
 
 void DynamicArray::resize(int newCapacity){
-  
   if (newCapacity>capacity){
     int* oldArr=arr;
     arr=new int[newCapacity];
@@ -106,9 +104,9 @@ void DynamicArray::resize(int newCapacity){
   }
 }
 
-//TODO exploring macros
-#define DOCTEST_CHECK_VECTOR_VALUES(vector,values){
-  for (int _i=0;i<values.length;i++){
+
+void check_array(DynamicArray& vector,const int (&values)[],int len){
+  for (int i=0;i<len;i++){
     CHECK(vector.at(i)==values[i]);
   }
 }
@@ -133,10 +131,11 @@ TEST_CASE("Test insert"){
   arr.push(8);
   CHECK(arr.getSize()==3);
   CHECK(arr.at(2)==8);
-  arr.insert(4,0);
-  DOCTEST_CHECK_VECTOR_VALUES(arr,{4,5,6,8})
-  arr.insert(7,4);
-  DOCTEST_CHECK_VECTOR_VALUES(arr,{4,5,6,7,8})
+  arr.insert(0,4);
+  CHECK(arr.getSize()==4);
+  check_array(arr,{4,5,6,8},4);
+  arr.insert(3,7);
+  check_array(arr,{4,5,6,7,8},5);
 }
 
 TEST_CASE("Test prepend"){
@@ -152,11 +151,8 @@ TEST_CASE("Test prepend"){
   arr.prepend(6);
 
   CHECK(arr.getSize()==3);
-  CHECK(arr.at(0)==6);
-  CHECK(arr.at(1)==8);
-  CHECK(arr.at(2)==5);
+  check_array(arr,{6,8,5},3);
 }
-
 
 
 TEST_CASE("Test resize"){
